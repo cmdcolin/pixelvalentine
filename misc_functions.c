@@ -1,9 +1,19 @@
-#include "misc_functions.h"
+#include "misc.h"
 
 
 volatile int ticks = 0;
 volatile int game_time = 0;
 
+
+int rrand(int M, int N)
+{
+	return M + rand() / (RAND_MAX / (N - M + 1) + 1);
+}
+
+float rrandf(int M, int N)
+{
+	return M + ((float)rand() / (float)RAND_MAX) * (N-M);
+}
 
 int setup()
 {
@@ -14,6 +24,48 @@ int setup()
 	return install_keyboard() & install_timer();
 }
 
+
+
+void assert_color(struct rgb_color * r)
+{
+		if(r->r < 0) r->r =0;
+		if(r->g < 0) r->g =0;
+		if(r->b < 0) r->b =0;
+
+		if(r->r >255) r->r =255;
+		if(r->g > 255) r->g =255;
+		if(r->b > 255) r->b =255;
+}
+
+void process_color(struct rgb_color * r, float diff)
+{
+		r->r -= diff;
+		r->g -= diff;
+		r->b -= diff;
+
+		assert_color(r);
+}
+
+void process_color_r(struct rgb_color * r, float rd, float gd, float bd)
+{
+		r->r -= rd;
+		r->g -= gd;
+		r->b -= bd;
+
+		assert_color(r);
+}
+
+int make_color(struct rgb_color * r)
+{
+	return makecol((int)r->r, (int)r->g, (int)r->b);
+}
+
+void reset(struct rgb_color *r)
+{
+		r->r = r->ro;
+		r->g = r->go;
+		r->b = r->bo;
+}
 
 const char * os_name(int number)
 {
@@ -65,13 +117,14 @@ void render_object(
 
 
 void darken_pixel(BITMAP * bit, int r, int g, int b)
-{				
-	for(int i = 0; i < bit->w; i++) 
+{			
+	int i, j, p, lol;	
+	for(i = 0; i < bit->w; i++) 
 	{
-		for(int j = 0; j < bit->h; j++) 
+		for( j = 0; j < bit->h; j++) 
 		{
-			int p = getpixel(bit, i, j);
-			int lol = p;
+			p = getpixel(bit, i, j);
+			lol = p;
 			lol &= 0x0000FF00;
 			lol >>= 8;
 
@@ -87,12 +140,14 @@ void darken_pixel(BITMAP * bit, int r, int g, int b)
 
 void darken_pixel16(BITMAP * bit, int r, int g, int b)
 {
-	for(int i = 0; i < bit->w; i++) {
-		for(int j = 0; j < bit->h; j++) {
-			int c = _getpixel16(bit, i, j);
-			int cr = c & 31;
-			int cg = (c >> 5) & 63;
-			int cb = (c >> 11) & 31;
+	int i, j, c, cr, cg, cb;
+
+	for(i = 0; i < bit->w; i++) {
+		for(j = 0; j < bit->h; j++) {
+			c = _getpixel16(bit, i, j);
+			cr = c & 31;
+			cg = (c >> 5) & 63;
+			cb = (c >> 11) & 31;
 			c = ((cr | (cb << 10) | (cg << 20)) * 50) >> 6;
 			cr = c & 31;
 			cb = (c >> 10) & 31;
@@ -107,12 +162,3 @@ END_OF_FUNCTION(ticker)
 
 void game_time_ticker() { game_time++; }
 END_OF_FUNCTION(game_time_ticker)
-
-
-
-
-
-
-
-
-
