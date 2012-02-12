@@ -16,7 +16,7 @@ int fieldh = 20;
     };
 
 
-int main(int argc, char ** argv) 
+int main() 
 {
     int width, height;
     char c;
@@ -31,7 +31,7 @@ int main(int argc, char ** argv)
     int frame_index = 0; //used to store the index of the last updated value in the array
 
     DATAFILE * d;
-
+    FONT * fonty;
     BITMAP *heart,*buffer,*bg,*cloud,*sun,*moon;
 
     int cloud_mover = 0;
@@ -53,6 +53,12 @@ int main(int argc, char ** argv)
     int hang_out = 0;
     int day = 1;
     int nocheck=0;
+
+    float theta = 0.0;
+    const float theta_speed = 0.05;
+
+    float cam = -50;
+    float camfly = 0.8;
 
 
     bgcolor.r = 30;    bgcolor.ro = 30;
@@ -79,7 +85,7 @@ int main(int argc, char ** argv)
 
 
         set_color_depth(32);
-        set_gfx_mode(GFX_AUTODETECT, scrx, scry, 0, 0);
+        ret =set_gfx_mode(GFX_AUTODETECT, scrx, scry, 0, 0);
         if(ret < 0)
             printf("Error: %s", allegro_error);
     
@@ -107,7 +113,7 @@ int main(int argc, char ** argv)
     bg = (BITMAP*)d[1].dat;
     cloud = (BITMAP*)d[2].dat;
     moon = (BITMAP*)d[3].dat;
-    FONT * fonty = (FONT*)d[4].dat;
+    fonty = (FONT*)d[4].dat;
 
     //heart = load_bitmap("picture 2.bmp",0);
     //bg = load_bitmap("picture 3.bmp",0);
@@ -128,12 +134,6 @@ int main(int argc, char ** argv)
 
     // Render to whole screen
     set_projection_viewport(0, 0, SCREEN_W, SCREEN_H);
-
-    float theta = 0.0;
-    const float theta_speed = 0.05;
-
-    float cam = -50;
-    float camfly = 0.8;
 
    install_mouse();
    show_mouse(screen);

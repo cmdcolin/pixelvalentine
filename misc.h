@@ -1,9 +1,23 @@
 #ifndef _MISC_H_
 #define _MISC_H_
 
+
 #define ALLEGRO_USE_CONSOLE
 #define ALLEGRO_STATICLINK
 #define ALLEGRO_NO_ASM
+#if defined(ALLEGRO_STATICLINK)
+	#if defined(DEBUG) || defined(_DEBUG)
+		#pragma comment(lib, "alld_s")
+	#else
+		#pragma comment(lib, "alleg_s")
+	#endif
+#else
+	#if defined(DEBUG) || defined(_DEBUG)
+		#pragma comment(lib, "alld")
+	#else
+		#pragma comment(lib, "alleg")
+	#endif
+#endif
 
 
 #include <allegro.h>

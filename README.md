@@ -14,12 +14,14 @@ Tested with
                                        /\____/
                                        \_/__/     Version 4.2.2
 
+For VC proj
 
 Includes
 c:\hell\allegro\include
 
-
 Lib allegro
 c:\hell\allegro\lib\msvc
 
+For DJGPP
+Compile gcc alleg.c misc.c -lalleg
 
