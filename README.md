@@ -1,6 +1,7 @@
 Pixel Valentine
 Created Feb 2009
 
+video https://www.facebook.com/photo.php?v=1109711782794&l=30759814073687807
 
 Tested with
 
@@ -24,4 +25,5 @@ c:\hell\allegro\lib\msvc
 
 For DJGPP
 Compile gcc alleg.c misc.c -lalleg
+
 
